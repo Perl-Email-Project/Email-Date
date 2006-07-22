@@ -1,9 +1,10 @@
 package Email::Date;
 use strict;
 
-use vars qw[$VERSION @EXPORT];
-$VERSION = '1.04';
-@EXPORT  = qw[find_date format_date format_gmdate];
+use vars qw[$VERSION @EXPORT @EXPORT_OK];
+$VERSION = '1.10';
+@EXPORT    = qw[find_date format_date];
+@EXPORT_OK = qw[format_gmdate];
 
 use base qw[Exporter];
 use Date::Parse ();

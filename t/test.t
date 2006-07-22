@@ -2,7 +2,7 @@ use Test::More tests => 14;
 use strict;
 $^W = 1;
 
-BEGIN { use_ok 'Email::Date' }
+BEGIN { use_ok 'Email::Date', qw(format_date format_gmdate find_date) }
 
 {
   my $time = time;
