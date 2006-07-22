@@ -1,4 +1,4 @@
-1.04    2006-07-21
+1.10    2006-07-21
 
   - add format_gmdate
   - if no date was found, return undef, not the current time
