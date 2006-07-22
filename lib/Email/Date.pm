@@ -57,6 +57,8 @@ C<find_date> accepts an email message in any format
 L<Email::Abstract|Email::Abstract> can understand. It looks through the email
 message and finds a date, converting it to a L<Time::Piece|Time::Piece> object.
 
+If it can't find a date, it returns false.
+
 =cut
 
 sub find_date {
@@ -66,11 +68,14 @@ sub find_date {
     my $date = $email->get_header('Date')
             || _find_date_received($email->get_header('Received'))
             || $email->get_header('Resent-Date');
+
+    return unless length $date;
+
     Time::Piece->new(Date::Parse::str2time $date);
 }
 
 sub _find_date_received {
-    return unless @_;
+    return unless length $_[0];
     my $date = pop;
     $date =~ s/.+;//;
     $date;
