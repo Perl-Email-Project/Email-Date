@@ -1,3 +1,9 @@
+1.04    2006-07-21
+
+  - add format_gmdate
+  - tests
+  - list Email::Abstract as a prereq
+
 1.03    2004-09-23
 
   - Email::Abstract is not required, and is only loaded when needed.

@@ -1,16 +1,15 @@
 package Email::Date;
-# $Id: Date.pm,v 1.3 2004/09/24 00:00:48 cwest Exp $
 use strict;
 
 use vars qw[$VERSION @EXPORT];
-$VERSION = sprintf "%d.%02d", split m/\./, (qw$Revision: 1.3 $)[1];
-@EXPORT  = qw[find_date format_date];
+$VERSION = '1.04';
+@EXPORT  = qw[find_date format_date format_gmdate];
 
 use base qw[Exporter];
-use Date::Parse;
+use Date::Parse ();
 use Email::Simple;
-use Time::Piece;
-use Time::Local;
+use Time::Piece ();
+use Time::Local ();
 
 =head1 NAME
 
@@ -55,26 +54,19 @@ compliant date strings is also found in this software.
   my $time_piece = find_date $email;
 
 C<find_date> accepts an email message in any format
-L<Email::Abstract|Email::Abstract> can understand. It looks through the
-email message and finds a date, converting it to a
-L<Time::Piece|Time::Piece> object.
+L<Email::Abstract|Email::Abstract> can understand. It looks through the email
+message and finds a date, converting it to a L<Time::Piece|Time::Piece> object.
 
 =cut
 
 sub find_date {
-    my ($email) = _get_simple_object($_[0]);
-    my $date = $email->header('Date')
-                || _find_date_received($email->header('Recieved'))
-                  || $email->header('Resent-Date');
-    Time::Piece->new(str2time $date);
-}
-
-sub _get_simple_object {
-    my ($email) = @_;
-    return $email if UNIVERSAL::isa($email, 'Email::Simple');
-    return Email::Simple->new($email) if ! ref($email);
     require Email::Abstract;
-    return Email::Abstract->cast($email, 'Email::Simple');
+    my $email = Email::Abstract->new($_[0]);
+
+    my $date = $email->get_header('Date')
+            || _find_date_received($email->get_header('Received'))
+            || $email->get_header('Resent-Date');
+    Time::Piece->new(Date::Parse::str2time $date);
 }
 
 sub _find_date_received {
@@ -94,26 +86,54 @@ It returns a string representing the date and time of the input, as
 specified in RFC 2822. If no input value is provided, the current value
 of C<time> is used.
 
+=item format_gmdate
+
+  my $date = format_gmdate;
+
+C<format_gmdate> is identical to C<format_date>, but it will return a string
+indicating the time in Greenwich Mean Time, rather than local time.
+
 =cut
 
-sub format_date {
-    my $time = shift || time;
-    my ($sec, $min, $hour, $mday, $mon, $year, $wday) = (localtime $time)[0..6];
-    my $day   = (qw[Sun Mon Tue Wed Thu Fri Sat])[$wday];
-    my $month = (qw[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec])[$mon];
-    $year += 1900;
-    
+sub _tz_diff {
+    my ($time) = @_;
+
     my $diff  =   Time::Local::timegm(localtime $time)
                 - Time::Local::timegm(gmtime    $time);
+
     my $direc = $diff < 0 ? '-' : '+';
        $diff  = abs $diff;
     my $tz_hr = int( $diff / 3600 );
     my $tz_mi = int( $diff / 60 - $tz_hr * 60 );
-    
-    sprintf "%s, %d %s %d %02d:%02d:%02d %s%02d%02d",
-      $day, $mday, $month, $year, $hour, $min, $sec, $direc, $tz_hr, $tz_mi;
 
+    return ($direc, $tz_hr, $tz_mi);
 }
+
+sub _format_date {
+    my ($local) = @_;
+
+    sub {
+        my ($time) = @_;
+        $time = time unless defined $time;
+
+        my ($sec, $min, $hour, $mday, $mon, $year, $wday) =
+          $local ? (localtime $time) : (gmtime $time);
+        my $day   = (qw[Sun Mon Tue Wed Thu Fri Sat])[$wday];
+        my $month = (qw[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec])[$mon];
+        $year += 1900;
+        
+        my ($direc, $tz_hr, $tz_mi) = $local ? _tz_diff($time)
+                                             : ('+', 0, 0);
+        
+        sprintf "%s, %d %s %d %02d:%02d:%02d %s%02d%02d",
+          $day, $mday, $month, $year, $hour, $min, $sec, $direc, $tz_hr, $tz_mi;
+    }
+}
+
+BEGIN {
+  *format_date   = _format_date(1);
+  *format_gmdate = _format_date(0);
+};
 
 1;
 
