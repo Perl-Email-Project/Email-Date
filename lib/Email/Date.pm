@@ -46,7 +46,7 @@ For this reason, the tedious process of looking for a valid date has been
 encapsulated in this software. Further, the process of creating RFC
 compliant date strings is also found in this software.
 
-=head2 Functions
+=head2 FUNCTIONS
 
 =over 4
 
@@ -59,6 +59,8 @@ L<Email::Abstract|Email::Abstract> can understand. It looks through the email
 message and finds a date, converting it to a L<Time::Piece|Time::Piece> object.
 
 If it can't find a date, it returns false.
+
+C<find_date> is exported by default.
 
 =cut
 
@@ -92,12 +94,16 @@ It returns a string representing the date and time of the input, as
 specified in RFC 2822. If no input value is provided, the current value
 of C<time> is used.
 
+C<format_date> is exported by default.
+
 =item format_gmdate
 
   my $date = format_gmdate;
 
 C<format_gmdate> is identical to C<format_date>, but it will return a string
 indicating the time in Greenwich Mean Time, rather than local time.
+
+C<format_gmdate> is exported on demand, but not by default.
 
 =cut
 
@@ -147,6 +153,12 @@ __END__
 
 =back
 
+=head1 PERL EMAIL PROJECT
+
+This module is maintained by the Perl Email Project
+
+  L<http://emailproject.perl.org/wiki/Email::Date>
+
 =head1 SEE ALSO
 
 L<Email::Abstract>,
@@ -157,6 +169,8 @@ L<perl>.
 =head1 AUTHOR
 
 Casey West, <F<casey@geeknest.com>>.
+
+Ricardo SIGNES, <F<rjbs@cpan.org>>.
 
 =head1 COPYRIGHT
 
