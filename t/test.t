@@ -76,7 +76,7 @@ __MESSAGE__
 
 is(
   length format_date, # no argument == now
-  31,
+  (localtime)[3] > 9 ? 31 : 30, # Day > 9 means extra char in the string
   "constant length",
 );
 
