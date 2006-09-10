@@ -157,7 +157,7 @@ __END__
 
 This module is maintained by the Perl Email Project
 
-  L<http://emailproject.perl.org/wiki/Email::Date>
+L<http://emailproject.perl.org/wiki/Email::Date>
 
 =head1 SEE ALSO
 
