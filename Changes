@@ -1,3 +1,6 @@
+1.102   2006-11-??
+  - remove uneeded dep on Email::Simple
+
 1.101   2006-08-01
 
   - fix a bug in testing; tests would only pass in second 2/3 of month

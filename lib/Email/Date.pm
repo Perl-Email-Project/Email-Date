@@ -8,7 +8,6 @@ $VERSION = '1.101';
 
 use base qw[Exporter];
 use Date::Parse ();
-use Email::Simple;
 use Time::Piece ();
 use Time::Local ();
 
