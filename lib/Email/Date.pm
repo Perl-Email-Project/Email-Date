@@ -2,7 +2,7 @@ package Email::Date;
 use strict;
 
 use vars qw[$VERSION @EXPORT @EXPORT_OK];
-$VERSION = '1.101';
+$VERSION = '1.102';
 @EXPORT    = qw[find_date format_date];
 @EXPORT_OK = qw[format_gmdate];
 
