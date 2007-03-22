@@ -71,13 +71,13 @@ sub find_date {
             || _find_date_received($email->get_header('Received'))
             || $email->get_header('Resent-Date');
 
-    return unless length $date;
+    return unless $date and length $date;
 
     Time::Piece->new(Date::Parse::str2time $date);
 }
 
 sub _find_date_received {
-    return unless length $_[0];
+    return unless defined $_[0] and length $_[0];
     my $date = pop;
     $date =~ s/.+;//;
     $date;
