@@ -1,3 +1,6 @@
+1.103   2007-11-30
+        generation of dates now done by Email::Date::Format
+
 1.102   2007-03-22
         remove uneeded dep on Email::Simple
         packaging improvements
