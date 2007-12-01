@@ -1,4 +1,4 @@
-use Test::More tests => 14;
+use Test::More tests => 13;
 use strict;
 $^W = 1;
 
@@ -81,18 +81,6 @@ is(
 );
 
 my $birthday = 1153432704; # no, really!
-
-my $tz = sprintf "%s%02u%02u", Email::Date::_tz_diff(1153432704);
-
-SKIP: {
-    skip "test only useful in US/Eastern, -0400, not $tz", 1 if $tz ne '-0400';
-
-    is(
-        format_date(1153432704),
-        'Thu, 20 Jul 2006 17:58:24 -0400',
-        "rjbs's birthday date format properly",
-    );
-}
 
 is(
   format_gmdate(1153432704),

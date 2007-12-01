@@ -7,11 +7,12 @@ WriteMakefile (
   NAME          => 'Email::Date',
   (eval { ExtUtils::MakeMaker->VERSION(6.21) } ? (LICENSE => 'perl') : ()),
   PREREQ_PM     => {
-    'Date::Parse'     => '2.27',
-    'Email::Abstract' => '2.10', # ->new method
-    'Test::More'      => '0.47',
-    'Time::Local'     => '1.07',
-    'Time::Piece'     => '1.08',
+    'Date::Parse'         => '2.27',
+    'Email::Abstract'     => '2.10', # ->new method
+    'Email::Date::Format' => '1.000',
+    'Test::More'          => '0.47',
+    'Time::Local'         => '1.07',
+    'Time::Piece'         => '1.08',
   },
   VERSION_FROM  => 'lib/Email/Date.pm',
 );

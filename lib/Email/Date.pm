@@ -2,14 +2,14 @@ package Email::Date;
 use strict;
 
 use vars qw[$VERSION @EXPORT @EXPORT_OK];
-$VERSION = '1.102';
+$VERSION = '1.103';
 @EXPORT    = qw[find_date format_date];
 @EXPORT_OK = qw[format_gmdate];
 
 use base qw[Exporter];
 use Date::Parse ();
+use Email::Date::Format;
 use Time::Piece ();
-use Time::Local ();
 
 =head1 NAME
 
@@ -106,44 +106,9 @@ C<format_gmdate> is exported on demand, but not by default.
 
 =cut
 
-sub _tz_diff {
-    my ($time) = @_;
-
-    my $diff  =   Time::Local::timegm(localtime $time)
-                - Time::Local::timegm(gmtime    $time);
-
-    my $direc = $diff < 0 ? '-' : '+';
-       $diff  = abs $diff;
-    my $tz_hr = int( $diff / 3600 );
-    my $tz_mi = int( $diff / 60 - $tz_hr * 60 );
-
-    return ($direc, $tz_hr, $tz_mi);
-}
-
-sub _format_date {
-    my ($local) = @_;
-
-    sub {
-        my ($time) = @_;
-        $time = time unless defined $time;
-
-        my ($sec, $min, $hour, $mday, $mon, $year, $wday) =
-          $local ? (localtime $time) : (gmtime $time);
-        my $day   = (qw[Sun Mon Tue Wed Thu Fri Sat])[$wday];
-        my $month = (qw[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec])[$mon];
-        $year += 1900;
-        
-        my ($direc, $tz_hr, $tz_mi) = $local ? _tz_diff($time)
-                                             : ('+', 0, 0);
-        
-        sprintf "%s, %d %s %d %02d:%02d:%02d %s%02d%02d",
-          $day, $mday, $month, $year, $hour, $min, $sec, $direc, $tz_hr, $tz_mi;
-    }
-}
-
 BEGIN {
-  *format_date   = _format_date(1);
-  *format_gmdate = _format_date(0);
+  *format_date   = \&Email::Date::Format::email_date;
+  *format_gmdate = \&Email::Date::Format::email_gmdate;
 };
 
 1;
