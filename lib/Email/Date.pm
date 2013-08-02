@@ -1,19 +1,15 @@
-package Email::Date;
 use strict;
+use warnings;
+package Email::Date;
+# ABSTRACT: Find and Format Date Headers
 
-use vars qw[$VERSION @EXPORT @EXPORT_OK];
-$VERSION = '1.103';
-@EXPORT    = qw[find_date format_date];
-@EXPORT_OK = qw[format_gmdate];
+our @EXPORT    = qw[find_date format_date];
+our @EXPORT_OK = qw[format_gmdate];
 
-use base qw[Exporter];
-use Date::Parse ();
-use Email::Date::Format;
-use Time::Piece ();
-
-=head1 NAME
-
-Email::Date - Find and Format Date Headers
+use Exporter 5.57 'import';
+use Date::Parse 2.27 ();
+use Email::Date::Format 1.000;
+use Time::Piece 1.08 ();
 
 =head1 SYNOPSIS
 
@@ -34,6 +30,10 @@ Email::Date - Find and Format Date Headers
 
 =head1 DESCRIPTION
 
+B<Achtung!>  Probably you'll be find just using L<Email::Date::Format> to
+produce dates or L<Date::Parse> to parse dates.  This module isn't much needed
+anymore, but does provide C<find_date>, described below.
+
 RFC 2822 defines the C<Date:> header. It declares the header a required
 part of an email message. The syntax for date headers is clearly laid
 out. Stil, even a perfectly planned world has storms. The truth is, many
@@ -45,11 +45,7 @@ For this reason, the tedious process of looking for a valid date has been
 encapsulated in this software. Further, the process of creating RFC
 compliant date strings is also found in this software.
 
-=head2 FUNCTIONS
-
-=over 4
-
-=item find_date
+=func find_date
 
   my $time_piece = find_date $email;
 
@@ -83,7 +79,7 @@ sub _find_date_received {
     $date;
 }
 
-=item format_date
+=func format_date
 
   my $date = format_date; # now
   my $date = format_date( time - 60*60 ); # one hour ago
@@ -95,7 +91,7 @@ of C<time> is used.
 
 C<format_date> is exported by default.
 
-=item format_gmdate
+=func format_gmdate
 
   my $date = format_gmdate;
 
@@ -112,34 +108,3 @@ BEGIN {
 };
 
 1;
-
-__END__
-
-=back
-
-=head1 PERL EMAIL PROJECT
-
-This module is maintained by the Perl Email Project
-
-L<http://emailproject.perl.org/wiki/Email::Date>
-
-=head1 SEE ALSO
-
-L<Email::Abstract>,
-L<Time::Piece>,
-L<Date::Parse>,
-L<perl>.
-
-=head1 AUTHOR
-
-Casey West, <F<casey@geeknest.com>>.
-
-Ricardo SIGNES, <F<rjbs@cpan.org>>.
-
-=head1 COPYRIGHT
-
-  Copyright (c) 2004 Casey West.  All rights reserved.
-  This module is free software; you can redistribute it and/or modify it
-  under the same terms as Perl itself.
-
-=cut

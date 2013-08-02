@@ -1,3 +1,9 @@
+Revision history for Email-Date
+
+{{$NEXT}}
+        point to new repo, new bug tracker, suggest users just use other
+        libraries when possible
+
 1.103   2007-11-30
         generation of dates now done by Email::Date::Format
 
