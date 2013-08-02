@@ -1,6 +1,8 @@
 Revision history for Email-Date
 
 {{$NEXT}}
+
+1.104     2013-08-02 18:00:42 America/New_York
         point to new repo, new bug tracker, suggest users just use other
         libraries when possible
 
